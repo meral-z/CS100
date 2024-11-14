@@ -30,29 +30,39 @@ public:
         return username;
     }
 
-    /*User (string name,string password,string filename)
+    
+    void setUser(string name,string password)
     {
         username = name;
-        hashed_password = hash(password);
-        int i = 0;
-        string line ;
-        fstream bookfile;
-        bookfile.open(filename,ios::app);
-        if(bookfile.is_open()){
-            while(!bookfile.eof()) //could use while(getline()) for simplicity
-            {    
-                getline(bookfile,line);
-                int separator = line.find(','); // using csv file so separator is ','
-                
-                string bname = line.substr(0,separator);
-                string iban = line.substr(separator + 1);
-                User[i].set_book(bname, iban);
-                i++; //importing linearly in array
-            }
-            
+        hashed_password = hashVal(password);
     }
-    */
 };
+
+int importUsers(string filename, User users[])  //return values of books stored and outputs
+{
+    string line ;
+    fstream userfile;
+    int i = 0;
+
+    userfile.open(filename,ios::in);
+    if(userfile.is_open()){
+        while(!userfile.eof()){     //could use while(getline()) for simplicity
+            getline(userfile,line);
+            int separator = line.find(','); // using csv file so separator is ','
+            
+            string usern = line.substr(0,separator);
+            string password = line.substr(separator + 1);
+            users[i].setUser(usern,password);
+            i++; //importing linearly in array
+        }
+        cout << "Import successfull: "<< i << " users imported!"<<endl;
+        userfile.close();
+        return i;
+    }
+    else
+        cout << "Error: Could not import books.";
+        return 0;
+}
 
 bool login(string username,string password, User arr[], int size)
 {
@@ -68,5 +78,29 @@ bool login(string username,string password, User arr[], int size)
     }
     cout << "Username or password invalid";
     return false;
+}
+
+
+bool signup(string username, string password, User arr[], int size, string filename)
+{
+    // linearly search in array if username alr exists
+    for(int i=0; i<=size ; i++)
+    {
+        if ((arr[i].user_name() == username))
+        {
+            cout << "Username is already in use";
+            return false;
+        }
+    }
+    arr[size].setUser(username,password);
+    size +=1;
+    
+    //appending user to file
+    fstream userfile;
+    userfile.open(filename,ios::app);
+    string line = username + "," + to_string(hashVal(password));
+    userfile << line << endl;
+    userfile.close();
+    return true;
 }
 

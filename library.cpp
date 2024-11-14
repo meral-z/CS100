@@ -8,7 +8,6 @@
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 //another class of users storing user name + password + books issued to them
 //have function of issued books
 //due books
@@ -26,22 +25,47 @@ int main()
 {
     Book books[200];
     User users[200];
+    string username;
+    string password;
+
     int input;
     string const bookfile = "books.txt";
     string const userfile = "users.txt";
 
     //use function import books to import from file
     int book_count = importbooks(bookfile, books);
-    //int user_count = importbooks(userfile, users); //add implementation for this
+    int user_count = importUsers(userfile, users); 
 
     //unaiza code
     //using switch case ask 1. Login as user (welcome message a. View issued books b. 
-    cout<< "1. Print all books"<< endl;
-    cout<< "2. Login";
-    cout<< "100. Exit library"<< endl;
-    cin >> input;
+    while(input != 100)
+    {
+        cout<< "1. Show all Book available in Library"<< endl;
+        cout<< "2. Login" << endl;
+        cout<< "3. Sign Up" << endl;
+        cout<< "100. Exit library"<< endl;
+        cin >> input;
 
-    printbooks(book_count-1, books);
+        switch (input)
+        {
+        case (1):
+            printbooks(book_count-1, books);
+            break;
+        case (2):
+            break;
+        case (3):
+            //password validation unaiza
+            cout << "Username: ";
+            cin >> username;
+            cout << "Password";
+            cin >> password;
+            signup(username,password,users,user_count,userfile);
+            break;
+        default:
+            cout << "Invalid Input";
+            break;
+        }
+    }
 
     //2. Login as admin 3. Sign up
     return 0;
