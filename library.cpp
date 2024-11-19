@@ -1,73 +1,118 @@
 #include <iostream>
 #include <iomanip>
-
-//#include "function.h" //include hash + password validation + 
-#include "books.h" // class declaration + import book function + print imported books
-#include "users.h"
+#include <ctime>
+#include "admin.h"
+//#include "books.h" // class declaration + import book function + print imported books
+//#include "users.h" // include hash + password validation + users class declaration
 
 using namespace std;
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//another class of users storing user name + password + books issued to them
-//have function of issued books
+string currentDate()
+{
+    // Get the current time as a time_t object
+    time_t currentTime = std::time(nullptr);
+
+    // Convert time_t to local time as a tm structure
+    tm* localTime = std::localtime(&currentTime);
+
+    // Extract the date, month, and year
+    int year = 1900 + localTime->tm_year; // tm_year is years since 2000
+    int month = 1 + localTime->tm_mon;   // tm_mon is months since January (0-11)
+    int day = localTime->tm_mday;        // Day of the month
+
+    // Output the current date
+    string current = to_string(day) + "." + to_string(month) + "." + to_string(year);
+    cout << "Current Date: " << current << endl;
+    return current;
+}
+
 //due books
 //create overdue fees function
-
-
-//function to import books from file
-//returns output error if exception error or file empty
-//else outputs number of books imported 
-
 //funtion to search for book from imported file
 
+void adminDash(Book books[], int book_count, User users[], int user_count)
+{
+    int input = 0;
+    cout << "--------------Welcome Admin---------------" << endl;
+    while(input!=2)
+    {
+        cout << "1. Issue book to user\n2.Exit\n";
+        cin >> input;
+        switch (input)
+        {
+        case 1:
+            issueBook("issuedbk.txt", books, book_count, users, user_count );
+            break;
+        default:
+            break;
+        }
+    }
+}
 
 int main()
 {
-    Book books[200];
+
+    string today = currentDate();
+
+    Book books[1000]; //A library by defination contains atleast 1000 books
     User users[200];
-    string username;
-    string password;
 
     int input;
     string const bookfile = "books.txt";
     string const userfile = "users.txt";
+    string const issuefile = "issuedbk.txt";
 
     //use function import books to import from file
     int book_count = importbooks(bookfile, books);
     int user_count = importUsers(userfile, users); 
+    int issued_books = importIssuedBooks(issuefile, books,users);
+    int userindex = -1;
 
     //unaiza code
     //using switch case ask 1. Login as user (welcome message a. View issued books b. 
     while(input != 100)
     {
         cout<< "1. Show all Book available in Library"<< endl;
-        cout<< "2. Login" << endl;
-        cout<< "3. Sign Up" << endl;
+        cout<< "2. Login as User" << endl;
+        cout<< "3. Login as Admin" << endl;
+        cout<< "4. Sign Up" << endl;
         cout<< "100. Exit library"<< endl;
         cin >> input;
 
         switch (input)
         {
         case (1):
-            printbooks(book_count-1, books);
+            printbooks(book_count, books);
             break;
         case (2):
+            userindex = login(users,user_count);
+
+            if (userindex!=-1)
+            {
+                User user = users[userindex];
+                cout <<"You have currently been issued the following Books:\n";
+                printbooksissued(user.getIssued(), books,user);
+                //printbooksdue(user.getIssued(),books,user,today);
+                cout <<"__________________________________________________________\n";
+                
+            }
             break;
-        case (3):
+        case(3):
+            if(loginAsAdmin() == true)
+                {adminDash(books, book_count, users, user_count );}
+            break;
+        case (4):
             //password validation unaiza
-            cout << "Username: ";
-            cin >> username;
-            cout << "Password";
-            cin >> password;
-            signup(username,password,users,user_count,userfile);
+            signup(users,user_count,userfile);
+            break;
+        case (100):
+            cout << "EXITING PROGRAM";
             break;
         default:
             cout << "Invalid Input";
             break;
         }
     }
-
-    //2. Login as admin 3. Sign up
     return 0;
 }
 

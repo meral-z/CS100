@@ -1,5 +1,5 @@
 #include <iostream>
-#include <ctime>  //for dates
+//#include <ctime>  //for dates
 #include <fstream>
 using namespace std;
 
@@ -8,8 +8,8 @@ private:
     string name;
     string iban;
     bool issued;
-    time_t date_issued;
-    time_t date_due;
+    string date_issued;
+    string date_due;
     string user_issued;
 
 public:
@@ -18,8 +18,8 @@ public:
         name = "";
         iban = "";
         issued = false;
-        date_issued = 0;
-        date_due = 0;
+        date_issued = "0.0.2000";
+        date_due = "0.0.2000";
         user_issued= "";
     }
     //initialise
@@ -30,14 +30,16 @@ public:
     }
 
     //issue book function to update issue status on file and on array
-    void issue(string ) {
+    void issue(string username, string issuedate, string duedate) {
         if(issued == false)
         {
             issued = true;
-            time(&date_issued);
+            user_issued = username;
+            date_issued = issuedate;
+            date_due =  duedate;
         }
         else
-            cout << "The book is unavailable for issuance. It will be available after " << date_due << endl;
+            cout << "The book is unavailable for issuance. It has already been issued to " << user_issued<< " and will be available after " << date_due << endl;
     }
     //Display info --for debugging--
     string book_name()
@@ -45,6 +47,26 @@ public:
         return name;
     }    
     
+    void setUserIssued(string user)
+    {
+        user_issued = user;
+    }
+    string getUserIssued()
+    {
+        return user_issued;
+    }
+    string get_iban()
+    {
+        return iban;
+    }
+    bool is_Issued()
+    {
+        return issued;
+    }
+    string getDue()
+    {
+        return date_due;
+    }
 };
 
 int importbooks(string filename, Book books[])  //return values of books stored and outputs
@@ -64,7 +86,7 @@ int importbooks(string filename, Book books[])  //return values of books stored 
             books[i].set_book(bname, iban);
             i++; //importing linearly in array
         }
-        cout << "Import successfull: "<< i << " Books imported!"<<endl;
+        //cout << "Import successfull: "<< i << " Books imported!"<<endl;
         bookfile.close();
         return i;
     }
@@ -75,9 +97,20 @@ int importbooks(string filename, Book books[])  //return values of books stored 
 
 void printbooks(int size, Book books[]) //outputs all books stored in array
 {
-    for(int i = 0; i <= size; i++)
+    cout <<"__________________________________________________________\n";
+    cout << "The library currently has these books: "<< endl;
+    for(int i = 0; i < size; i++)
     {
         cout << books[i].book_name() << endl;
     }
+    cout <<"__________________________________________________________\n";
 }
 
+int findbook(string book, Book books[], int size) {
+    for (int x = 0; x < size; ++x) {
+        if (books[x].book_name() == book) {
+            return x; // Found the book
+        }
+    }
+    return -1; // Book not found
+}
