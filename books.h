@@ -31,7 +31,7 @@ public:
 
     //issue book function to update issue status on file and on array
     void issue(string username, string issuedate, string duedate) {
-        if(issued == false)
+        if (issued == false)
         {
             issued = true;
             user_issued = username;

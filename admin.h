@@ -208,7 +208,7 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
         cin >> year;
     }
     setdates(issuedate, duedate, date, month, year);
-    if (books[bookindex].is_Issued() == false)
+    if (books[bookindex].is_Issued() == false && users[userindex].getIssued() < 3)
     {
         books[bookindex].issue(username, issuedate, duedate);
         users[userindex].issue(bookindex);
@@ -222,7 +222,7 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
         file.close();
     }
     else
-        books[bookindex].issue(username, issuedate, duedate);
+        users[userindex].issue(bookindex);
 }
 
 
