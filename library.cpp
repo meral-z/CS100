@@ -27,9 +27,6 @@ string currentDate()
     return current;
 }
 
-//due books
-//create overdue fees function
-//funtion to search for book from imported file
 
 void adminDash(Book books[], int book_count, User users[], int user_count, string today) ////need to work on dunction
 {
@@ -59,8 +56,9 @@ void adminDash(Book books[], int book_count, User users[], int user_count, strin
         default:
             break;
         }
-        cout << "EXITING ADMIN DASHBOARD" << endl << endl;
     }
+
+    cout << "EXITING ADMIN DASHBOARD" << endl << endl;
 }
 
 
@@ -85,11 +83,9 @@ int main()
     string bookname;
     int find = -1;
 
-    //unaiza code
-    //using switch case ask 1. Login as user (welcome message a. View issued books b. 
     while(input != 100)
     {
-        cout<< "1. Show all Book available in Library"<< endl;
+        cout<< "1. Show all Books available in Library"<< endl;
         cout<< "2. Login as User" << endl;
         cout<< "3. Login as Admin" << endl;
         cout<< "4. Sign Up" << endl;
@@ -132,10 +128,10 @@ int main()
             searchlib(books, book_count);
             break;
         case (100):
-            cout << "EXITING PROGRAM";
+            cout << "EXITING PROGRAM\n";
             break;
         default:
-            cout << "Invalid Input";
+            cout << "Invalid Input\n";
             break;
         }
     }

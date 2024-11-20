@@ -180,9 +180,9 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
     while(bookindex < 0)
     {
         cout << "Enter Book name: ";
+        cin.ignore();
         getline(cin,bookname);
         bookindex = findbook(bookname, books, book_count);
-        cout << endl;
     }
     while(userindex < 0)
     {
