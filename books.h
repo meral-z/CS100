@@ -114,3 +114,16 @@ int findbook(string book, Book books[], int size) {
     }
     return -1; // Book not found
 }
+
+void searchlib(Book books[], int size)
+{
+    int find;
+    string bookname;
+    string output;
+    cout << "Enter book name to search in library: "<< endl;
+    cin.ignore();
+    getline(cin, bookname);
+    find = findbook(bookname,books,size);
+    output = (find==-1)? "Book is not in library." : (books[find].is_Issued() == true)? "Book has already been issued." : "Book is available for issuance.";
+    cout << output << endl;
+}

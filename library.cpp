@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <ctime>
 #include "admin.h"
+
 //#include "books.h" // class declaration + import book function + print imported books
 //#include "users.h" // include hash + password validation + users class declaration
 
@@ -21,7 +22,7 @@ string currentDate()
     int day = localTime->tm_mday;        // Day of the month
 
     // Output the current date
-    string current = to_string(day) + "." + to_string(month) + "." + to_string(year);
+    string current = to_string(day) + "." + to_string(month) + "." + to_string(year - 2000);
     cout << "Current Date: " << current << endl;
     return current;
 }
@@ -30,28 +31,41 @@ string currentDate()
 //create overdue fees function
 //funtion to search for book from imported file
 
-void adminDash(Book books[], int book_count, User users[], int user_count)
+void adminDash(Book books[], int book_count, User users[], int user_count, string today) ////need to work on dunction
 {
     int input = 0;
     cout << "--------------Welcome Admin---------------" << endl;
-    while(input!=2)
+    while(input!=4)
     {
-        cout << "1. Issue book to user\n2.Exit\n";
+        cout << "1. Issue book to user\n2. View All issued Books\n3. View overdue Books\n4. Exit\n";
         cin >> input;
         switch (input)
         {
         case 1:
-            issueBook("issuedbk.txt", books, book_count, users, user_count );
+            issueBook("issuedbk.txt", books, book_count, users, user_count);
+            break;
+        case 2:
+            cout << setfill('_') << setw(22) << "" << endl;
+            cout << "ISSUED BOOKS:" << endl;
+            printAllIssued(books,book_count);
+            cout << setfill('_') << setw(22) << "" << endl;
+            break;
+        case 3:
+            cout << setfill('_') << setw(22) << "" << endl;
+            cout << "OVERDUE BOOKS:" << endl;
+            printAlloverdue(books,book_count,today);
+            cout << setfill('_') << setw(22) << "" << endl;
             break;
         default:
             break;
         }
+        cout << "EXITING ADMIN DASHBOARD" << endl << endl;
     }
 }
 
+
 int main()
 {
-
     string today = currentDate();
 
     Book books[1000]; //A library by defination contains atleast 1000 books
@@ -68,6 +82,9 @@ int main()
     int issued_books = importIssuedBooks(issuefile, books,users);
     int userindex = -1;
 
+    string bookname;
+    int find = -1;
+
     //unaiza code
     //using switch case ask 1. Login as user (welcome message a. View issued books b. 
     while(input != 100)
@@ -76,6 +93,7 @@ int main()
         cout<< "2. Login as User" << endl;
         cout<< "3. Login as Admin" << endl;
         cout<< "4. Sign Up" << endl;
+        cout<< "5. Search book in library" << endl;
         cout<< "100. Exit library"<< endl;
         cin >> input;
 
@@ -90,20 +108,28 @@ int main()
             if (userindex!=-1)
             {
                 User user = users[userindex];
+                cout << setfill('_') << setw(22) << "" << endl;
                 cout <<"You have currently been issued the following Books:\n";
                 printbooksissued(user.getIssued(), books,user);
-                //printbooksdue(user.getIssued(),books,user,today);
-                cout <<"__________________________________________________________\n";
+                cout << setfill('_') << setw(22) << "" << endl;
+
+                cout << endl;
+
+                printbooksdue(user.getIssued(),books,user,today);
+                cout << setfill('_') << setw(22) << "" << endl;
                 
             }
             break;
         case(3):
             if(loginAsAdmin() == true)
-                {adminDash(books, book_count, users, user_count );}
+                adminDash(books, book_count, users, user_count, today);
             break;
         case (4):
             //password validation unaiza
             signup(users,user_count,userfile);
+            break;
+        case 5:
+            searchlib(books, book_count);
             break;
         case (100):
             cout << "EXITING PROGRAM";

@@ -16,6 +16,16 @@ void printbooksissued(int issued, Book books[], User user)
     }
 }
 
+void printAllIssued(Book books[], int book_count)
+{
+    for(int x= 0; x < book_count;x++)
+    {
+        if(books[x].is_Issued())
+            cout << books[x].book_name() << endl;
+    }
+}
+
+
 void parsedate(string date, int &day, int &month, int &year)
 {
     int firstDot = date.find('.');
@@ -27,9 +37,25 @@ void parsedate(string date, int &day, int &month, int &year)
     year = stoi(date.substr(secondDot + 1));
 }
 
+void printAlloverdue(Book books[], int book_count,string today)
+{
+    int tday,tmonth,tyear; // for today
+    int dday,dmonth,dyear; //for due
+
+    parsedate(today,tday,tmonth,tyear);
+    for(int x= 0; x < book_count;x++)
+    {
+        parsedate(books[x].getDue(),dday,dmonth,dyear);
+        if((dyear < tyear) || (dyear == tyear && dmonth < tmonth) || (dyear == tyear && dmonth == tmonth && dday < tday))
+        {
+            cout << books[x].book_name() << endl;
+        }
+    }
+}
+
 void printbooksdue(int issued, Book books[], User user, string today)
 {
-    cout << "Books Due:" << endl;
+    cout << "Books Due recently:" << endl;
     int tday,tmonth,tyear; // for today
     int dday,dmonth,dyear; //for due
 
@@ -48,7 +74,7 @@ void printbooksdue(int issued, Book books[], User user, string today)
             if (dday == tday)
                 cout << books[index].book_name() << "IS DUE TO BE RETURNED TODAY!";
             else
-                cout << "REMINDER " << books[index].book_name() << "IS DUE TO BE RETURNED IN " << tday - dday << " DAY(S)!\n";
+                cout << "REMINDER " << books[index].book_name() << " IS DUE TO BE RETURNED IN " << dday - tday << " DAY(S)!\n";
         }
     }
 }
@@ -102,7 +128,7 @@ int importIssuedBooks(string filename, Book books[], User users[])  //return val
     return 0;
 }
 
-void changePass()
+/*void changePass()
 {
     string old, newpass, confirm;
     cout << "Enter current password: ";
@@ -127,7 +153,7 @@ void changePass()
     {
         cout << "Incorrect current password!\n";
     }
-}
+}*/
 
 void setdates(string &start, string &end, int day, int month, int year)
 {
@@ -165,7 +191,7 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
         userindex = finduser(username, users, user_count);
     }
     string issuedate, duedate;
-    int date, month, year = 0;
+    int date =0, month = 0, year = 0;
     while(date <= 0 || date > 30)
     { 
         cout << "Enter date (0-30): ";
@@ -215,4 +241,5 @@ bool loginAsAdmin()
         cout << "Unable to login as admin!\n";
     return false;
 }
+
 
