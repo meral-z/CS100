@@ -12,7 +12,7 @@ private:
     int duefee;
     int hashed_password;
     int issued;
-    int issuedbooksindex[2];//each user can only issue 3 books, stores index of book issued
+    int issuedbooksindex[3];//each user can only issue 3 books, stores index of book issued
 
 public:
     User()
