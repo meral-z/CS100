@@ -215,7 +215,7 @@ bool isUserValid(User arr[],int size,string username)
     return true;
 }
 
-bool signup(User arr[], int size, string filename)
+bool signup(User arr[], int & size, string filename)
 {
     string username;
     string password;
