@@ -184,6 +184,11 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
         getline(cin,bookname);
         bookindex = findbook(bookname, books, book_count);
     }
+    if(books[bookindex].is_Issued() == true)  
+    {
+        cout << "Book has already been issued\n\n";
+        return;
+    }
     while(userindex < 0)
     {
         cout << "Enter Issuers Username: ";
