@@ -65,8 +65,11 @@ void adminDash(Book books[], int book_count, User users[], int user_count, strin
 int main()
 {
     string today = currentDate();
+    string const ADMIN = "admin";
+    string admin_pass = "admin123";
 
-    Book books[1000]; //A library by defination contains atleast 1000 books
+    //A library by defination contains atleast 1000 books
+    Book books[1000]; 
     User users[200];
 
     int input;
@@ -75,7 +78,7 @@ int main()
     string const issuefile = "issuedbk.txt";
 
     //use function import books to import from file
-    int book_count = importbooks(bookfile, books);
+    int book_count = importBooks(bookfile, books);
     int user_count = importUsers(userfile, users); 
     int issued_books = importIssuedBooks(issuefile, books,users);
     int userindex = -1;
@@ -96,7 +99,7 @@ int main()
         switch (input)
         {
         case (1):
-            printbooks(book_count, books);
+            printBooks(book_count, books);
             break;
         case (2):
             userindex = login(users,user_count);
@@ -106,26 +109,26 @@ int main()
                 User user = users[userindex];
                 cout << setfill('_') << setw(22) << "" << endl;
                 cout <<"You have currently been issued the following Books:\n";
-                printbooksissued(user.getIssued(), books,user);
+                printBooksIssued(user.getIssued(), books,user);
                 cout << setfill('_') << setw(22) << "" << endl;
 
                 cout << endl;
 
-                printbooksdue(user.getIssued(),books,user,today);
+                printBooksDue(user.getIssued(),books,user,today);
                 cout << setfill('_') << setw(22) << "" << endl;
                 
             }
             break;
         case(3):
-            if(loginAsAdmin() == true)
+            if(loginAsAdmin(ADMIN,admin_pass) == true)
                 adminDash(books, book_count, users, user_count, today);
             break;
         case (4):
             //password validation unaiza
-            signup(users,user_count,userfile);
+            signUp(users,user_count,userfile);
             break;
         case 5:
-            searchlib(books, book_count);
+            searchLib(books, book_count);
             break;
         case (100):
             cout << "EXITING PROGRAM\n";

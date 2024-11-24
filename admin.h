@@ -3,16 +3,13 @@
 #include "users.h"
 using namespace std;
 
-string const ADMIN = "admin";
-string admin_pass = "admin123";
 
-
-void printbooksissued(int issued, Book books[], User user)
+void printBooksIssued(int issued, Book books[], User user)
 {
     for(int x= 0; x < issued;x++)
     {
-        int index = user.get_bookindex(x);
-        cout << books[index].book_name() << endl;
+        int index = user.getBookIndex(x);
+        cout << books[index].getBookName() << endl;
     }
 }
 
@@ -20,13 +17,13 @@ void printAllIssued(Book books[], int book_count)
 {
     for(int x= 0; x < book_count;x++)
     {
-        if(books[x].is_Issued())
-            cout << books[x].book_name() << endl;
+        if(books[x].isIssued())
+            cout << books[x].getBookName() << endl;
     }
 }
 
 
-void parsedate(string date, int &day, int &month, int &year)
+void parseDate(string date, int &day, int &month, int &year)
 {
     int firstDot = date.find('.');
     int secondDot = date.find('.', firstDot + 1);
@@ -42,39 +39,39 @@ void printAlloverdue(Book books[], int book_count,string today)
     int tday,tmonth,tyear; // for today
     int dday,dmonth,dyear; //for due
 
-    parsedate(today,tday,tmonth,tyear);
+    parseDate(today,tday,tmonth,tyear);
     for(int x= 0; x < book_count;x++)
     {
-        parsedate(books[x].getDue(),dday,dmonth,dyear);
+        parseDate(books[x].getDue(),dday,dmonth,dyear);
         if((dyear < tyear) || (dyear == tyear && dmonth < tmonth) || (dyear == tyear && dmonth == tmonth && dday < tday))
         {
-            cout << books[x].book_name() << endl;
+            cout << books[x].getBookName() << endl;
         }
     }
 }
 
-void printbooksdue(int issued, Book books[], User user, string today)
+void printBooksDue(int issued, Book books[], User user, string today)
 {
     cout << "Books Due recently:" << endl;
     int tday,tmonth,tyear; // for today
     int dday,dmonth,dyear; //for due
 
-    parsedate(today,tday,tmonth,tyear);
+    parseDate(today,tday,tmonth,tyear);
     for(int x= 0; x < issued;x++)
     {
-        int index = user.get_bookindex(x);
-        parsedate(books[index].getDue(),dday,dmonth,dyear);
+        int index = user.getBookIndex(x);
+        parseDate(books[index].getDue(),dday,dmonth,dyear);
         if((dyear < tyear) || (dyear == tyear && dmonth < tmonth) || (dyear == tyear && dmonth == tmonth && dday < tday))
         {
             cout << "Due Date has passed for: ";
-            cout << books[index].book_name() << endl;
+            cout << books[index].getBookName() << endl;
         }
         else if(((dday <= (tday+3)) && (dmonth == tmonth)&&(dyear ==tyear)))
         {
             if (dday == tday)
-                cout << books[index].book_name() << "IS DUE TO BE RETURNED TODAY!";
+                cout << books[index].getBookName() << "IS DUE TO BE RETURNED TODAY!";
             else
-                cout << "REMINDER " << books[index].book_name() << " IS DUE TO BE RETURNED IN " << dday - tday << " DAY(S)!\n";
+                cout << "REMINDER " << books[index].getBookName() << " IS DUE TO BE RETURNED IN " << dday - tday << " DAY(S)!\n";
         }
     }
 }
@@ -105,13 +102,13 @@ int importIssuedBooks(string filename, Book books[], User users[])  //return val
             string duedate = line.substr(separator + 1) ;
 
             int j = 0;
-            while(books[j].get_iban()!=iban && books[j].get_iban() != "")
+            while(books[j].getIban()!=iban && books[j].getIban() != "")
             {
                 j++;
             }
             books[j].issue(username, issueddate, duedate);
             int x = 0;
-            while(users[x].user_name()!=username && users[x].user_name() != "")
+            while(users[x].getUsername()!=username && users[x].getUsername() != "")
             {
                 x++;
             }
@@ -155,7 +152,7 @@ int importIssuedBooks(string filename, Book books[], User users[])  //return val
     }
 }*/
 
-void setdates(string &start, string &end, int day, int month, int year)
+void setDates(string &start, string &end, int day, int month, int year)
 {
     start = to_string(day) + "." + to_string(month) + "." + to_string(year);
     day +=14; 
@@ -182,9 +179,9 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
         cout << "Enter Book name: ";
         cin.ignore();
         getline(cin,bookname);
-        bookindex = findbook(bookname, books, book_count);
+        bookindex = findBook(bookname, books, book_count);
     }
-    if(books[bookindex].is_Issued() == true)  
+    if(books[bookindex].isIssued() == true)  
     {
         cout << "Book has already been issued\n\n";
         return;
@@ -212,8 +209,8 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
         cout << "Enter year (XX): ";
         cin >> year;
     }
-    setdates(issuedate, duedate, date, month, year);
-    if (books[bookindex].is_Issued() == false && users[userindex].getIssued() < 3)
+    setDates(issuedate, duedate, date, month, year);
+    if (books[bookindex].isIssued() == false && users[userindex].getIssued() < 3)
     {
         books[bookindex].issue(username, issuedate, duedate);
         users[userindex].issue(bookindex);
@@ -222,7 +219,7 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
 
         fstream file;
         file.open(filename,ios::app);
-        string line = books[bookindex].get_iban() + "," + username +"," + issuedate + "," + duedate ;
+        string line = books[bookindex].getIban() + "," + username +"," + issuedate + "," + duedate ;
         file << endl << line;
         file.close();
     }
@@ -231,7 +228,7 @@ void issueBook(string filename, Book books[], int book_count, User users[], int 
 }
 
 
-bool loginAsAdmin()
+bool loginAsAdmin(string ADMIN, string admin_pass)
 {
     string username,password;
     cout << "Admin Username: ";

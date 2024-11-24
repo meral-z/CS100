@@ -25,6 +25,7 @@ Password = admin123
 
 Each person can only be issued 3 books max by the Admin
 
+sample input:
 Issue book: To Kill a Mockingbird
 Issuer name: Charles
 .

@@ -23,7 +23,7 @@ public:
         user_issued= "";
     }
     //initialise
-    void set_book(string pname,string piban) {
+    void setBook(string pname,string piban) {
         name = pname;
         iban = piban;
         issued = false;
@@ -42,7 +42,7 @@ public:
             cout << "The book is unavailable for issuance. It has already been issued to " << user_issued<< " and will be available after " << date_due << endl;
     }
     //Display info --for debugging--
-    string book_name()
+    string getBookName()
     {
         return name;
     }    
@@ -55,11 +55,11 @@ public:
     {
         return user_issued;
     }
-    string get_iban()
+    string getIban()
     {
         return iban;
     }
-    bool is_Issued()
+    bool isIssued()
     {
         return issued;
     }
@@ -69,7 +69,7 @@ public:
     }
 };
 
-int importbooks(string filename, Book books[])  //return values of books stored and outputs
+int importBooks(string filename, Book books[])  //return values of books stored and outputs
 {
     string line ;
     fstream bookfile;
@@ -83,7 +83,7 @@ int importbooks(string filename, Book books[])  //return values of books stored 
             
             string bname = line.substr(0,separator);
             string iban = line.substr(separator + 1);
-            books[i].set_book(bname, iban);
+            books[i].setBook(bname, iban);
             i++; //importing linearly in array
         }
         //cout << "Import successfull: "<< i << " Books imported!"<<endl;
@@ -95,27 +95,27 @@ int importbooks(string filename, Book books[])  //return values of books stored 
         return 0;
 }
 
-void printbooks(int size, Book books[]) //outputs all books stored in array
+void printBooks(int size, Book books[]) //outputs all books stored in array
 {
     cout <<"__________________________________________________________\n";
     cout << "The library currently has these books: "<< endl;
     for(int i = 0; i < size; i++)
     {
-        cout << books[i].book_name() << endl;
+        cout << books[i].getBookName() << endl;
     }
     cout <<"__________________________________________________________\n";
 }
 
-int findbook(string book, Book books[], int size) {
+int findBook(string book, Book books[], int size) {
     for (int x = 0; x < size; ++x) {
-        if (books[x].book_name() == book) {
+        if (books[x].getBookName() == book) {
             return x; // Found the book
         }
     }
     return -1; // Book not found
 }
 
-void searchlib(Book books[], int size)
+void searchLib(Book books[], int size)
 {
     int find;
     string bookname;
@@ -123,7 +123,7 @@ void searchlib(Book books[], int size)
     cout << "Enter book name to search in library: "<< endl;
     cin.ignore();
     getline(cin, bookname);
-    find = findbook(bookname,books,size);
-    output = (find==-1)? "Book is not in library." : (books[find].is_Issued() == true)? "Book has already been issued." : "Book is available for issuance.";
+    find = findBook(bookname,books,size);
+    output = (find==-1)? "Book is not in library." : (books[find].isIssued() == true)? "Book has already been issued." : "Book is available for issuance.";
     cout << output << endl;
 }

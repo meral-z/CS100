@@ -33,16 +33,16 @@ public:
         else
             cout << "This user has already been issued 3 books\n";
     }
-    int hash_pass()
+    int hashPass()
     {
         return hashed_password;
     }
-    int get_bookindex(int x)
+    int getBookIndex(int x)
     {
         return issuedbooksindex[x];
     }
 
-    string user_name()
+    string getUsername()
     {
         return username;
     }
@@ -75,7 +75,7 @@ void printUsers(int size, User users[])
 {
     for(int i=0; i<=size ; i++)
     {
-        cout << users[i].user_name() << endl;
+        cout << users[i].getUsername() << endl;
     } 
 }
 
@@ -130,7 +130,7 @@ int login(User arr[], int size)
     //linear search for password corresponding to username
     for(int i=0; i<=size ; i++)
     {
-        if ((arr[i].user_name() == username)&&(arr[i].hash_pass() == hashVal(password)))
+        if ((arr[i].getUsername() == username)&&(arr[i].hashPass() == hashVal(password)))
         {
             cout << "\n----------|----------" << "Welcome " << username << "----------|----------\n\n";
             return i;
@@ -155,7 +155,6 @@ bool isPasswordValid(string password)
         }
         while (password.length()<12);
     }
-    // can remove while loop as its technically repetation and take it to main
 
     else
     {
@@ -206,7 +205,7 @@ bool isUserValid(User arr[],int size,string username)
     // linearly search in array if username alr exists
     for(int i=0; i<=size ; i++)
     {
-        if ((arr[i].user_name() == username))
+        if ((arr[i].getUsername() == username))
         {
             cout << "Username is already in use. Try again.\n";
             return false;
@@ -215,7 +214,7 @@ bool isUserValid(User arr[],int size,string username)
     return true;
 }
 
-bool signup(User arr[], int & size, string filename)
+bool signUp(User arr[], int & size, string filename)
 {
     string username;
     string password;
@@ -240,6 +239,7 @@ bool signup(User arr[], int & size, string filename)
     arr[size].setUser(username,hashVal(password));
     size +=1;
     cout << "Sign Up Successful!" << endl;
+
     //appending user to file
     fstream userfile;
     userfile.open(filename,ios::app);
@@ -247,13 +247,12 @@ bool signup(User arr[], int & size, string filename)
     userfile << endl << line;
     userfile.close();
     return true;
-    
 }
 
 int finduser(string username, User users[], int size)
 {
     for (int x = 0; x < size; ++x) {
-        if (users[x].user_name() == username) {
+        if (users[x].getUsername() == username) {
             return x; // Found the book
         }
     }
